@@ -27,7 +27,7 @@ public class AdoptionListener {
 	@Blocking
 	public void handleAdoption(AdoptionRequest adoptionRequest) {
 		Log.infof("Handling adoption for request: %s", adoptionRequest);
-		this.petRepository.adoptPetIfFound(adoptionRequest.getKind(), adoptionRequest.getOwner())
+		this.petRepository.adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner())
 			.ifPresent(this.petEmitter::send);
 	}
 }

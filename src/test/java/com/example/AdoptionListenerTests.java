@@ -43,7 +43,7 @@ class AdoptionListenerTests {
 		var pet = new Pet(1L, "fluffy", "cat", "Eric");
 		var adoptionRequest = new AdoptionRequest("Eric", pet.getKind());
 
-		when(this.petRepository.adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.getOwner())))
+		when(this.petRepository.adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.owner())))
 			.thenReturn(Optional.of(pet));
 
 		this.emitterConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME).send(adoptionRequest);
@@ -59,9 +59,9 @@ class AdoptionListenerTests {
 			.singleElement()
 			.extracting(Message::getPayload)
 			.usingRecursiveComparison()
-			.isEqualTo(new Pet(pet.getId(), pet.getName(), pet.getKind(), adoptionRequest.getOwner()));
+			.isEqualTo(new Pet(pet.getId(), pet.getName(), pet.getKind(), adoptionRequest.owner()));
 
-		verify(this.petRepository).adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.getOwner()));
+		verify(this.petRepository).adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.owner()));
 		verify(this.adoptionListener).handleAdoption(any(AdoptionRequest.class));
 		verifyNoMoreInteractions(this.petRepository);
 	}
@@ -71,12 +71,12 @@ class AdoptionListenerTests {
 		var pet = new Pet(1L, "fluffy", "cat");
 		var adoptionRequest = new AdoptionRequest("Eric", pet.getKind());
 
-		when(this.petRepository.adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.getOwner())))
+		when(this.petRepository.adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.owner())))
 			.thenReturn(Optional.empty());
 
 		this.emitterConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME).send(adoptionRequest);
 
-		verify(this.petRepository, timeout(10 * 1000)).adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.getOwner()));
+		verify(this.petRepository, timeout(10 * 1000)).adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.owner()));
 		verify(this.adoptionListener, timeout(10 * 1000)).handleAdoption(any(AdoptionRequest.class));
 		verifyNoMoreInteractions(this.petRepository);
 	}

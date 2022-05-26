@@ -44,15 +44,16 @@ public class AdoptionListenerIT {
 		assertThat(adoptionConsumer.count())
 			.isEqualTo(1L);
 
-		assertThat(adoptionConsumer.getLastRecord().value())
+		var petFromKafka = adoptionConsumer.getLastRecord().value();
+
+		assertThat(petFromKafka)
 			.isNotNull()
 			.usingRecursiveComparison()
-			.isEqualTo(new Pet(pet.getId(), pet.getName(), adoptionRequest.getKind(), adoptionRequest.getOwner()));
+			.isEqualTo(new Pet(pet.getId(), pet.getName(), adoptionRequest.kind(), adoptionRequest.owner()));
 
 		assertThat(getPet())
-			.isNotNull()
 			.usingRecursiveComparison()
-			.isEqualTo(new Pet(pet.getId(), pet.getName(), adoptionRequest.getKind(), adoptionRequest.getOwner()));
+			.isEqualTo(petFromKafka);
 	}
 
 	private Pet getPet() {
