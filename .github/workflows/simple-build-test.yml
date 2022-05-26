@@ -56,7 +56,7 @@ jobs:
           distribution: temurin
           cache: maven
 
-      - name: build-test-jvm
+      - name: build-test-jvm-container
         run: ./mvnw -B clean verify -Dquarkus.http.host=0.0.0.0 -Dquarkus.container-image.build=true
 
   native-build-test:
@@ -103,5 +103,5 @@ jobs:
           distribution: temurin
           cache: maven
 
-      - name: build-test-native
+      - name: build-test-native-container
         run: ./mvnw -B clean verify -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.http.host=0.0.0.0
