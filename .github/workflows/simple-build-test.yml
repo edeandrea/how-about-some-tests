@@ -30,7 +30,7 @@ concurrency:
 jobs:
   jvm-build-test:
     runs-on: ubuntu-latest
-    if: github.repository == 'edeandrea/codepalousa-demo'
+    if: github.repository == 'edeandrea/how-about-some-tests'
     steps:
       - uses: actions/checkout@v3
 
@@ -46,7 +46,7 @@ jobs:
 
   jvm-container-build-test:
     runs-on: ubuntu-latest
-    if: github.repository == 'edeandrea/codepalousa-demo'
+    if: github.repository == 'edeandrea/how-about-some-tests'
     steps:
       - uses: actions/checkout@v3
 
@@ -62,7 +62,7 @@ jobs:
 
   native-build-test:
     runs-on: ubuntu-latest
-    if: github.repository == 'edeandrea/codepalousa-demo'
+    if: github.repository == 'edeandrea/how-about-some-tests'
     steps:
       - uses: actions/checkout@v3
 
@@ -93,7 +93,7 @@ jobs:
 
   native-container-build-test:
     runs-on: ubuntu-latest
-    if: github.repository == 'edeandrea/codepalousa-demo'
+    if: github.repository == 'edeandrea/how-about-some-tests'
     steps:
       - uses: actions/checkout@v3
 
