@@ -6,13 +6,10 @@ import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.blankOrNullString;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
-import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 
 @QuarkusIntegrationTest
@@ -25,8 +22,9 @@ public class PetApplicationIT {
 			.then()
 			.contentType(ContentType.JSON)
 			.statusCode(OK.getStatusCode())
-			.extract().body()
-			.as(new TypeRef<List<Pet>>() {});
+			.extract()
+			.body()
+			.jsonPath().getList(".", Pet.class);
 
 		assertThat(pets)
 			.isNotNull()

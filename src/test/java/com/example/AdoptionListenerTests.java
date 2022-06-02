@@ -47,7 +47,6 @@ class AdoptionListenerTests {
 			.thenReturn(Optional.of(pet));
 
 		this.emitterConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME).send(adoptionRequest);
-
 		var sink = this.emitterConnector.sink(AdoptionListener.ADOPTIONS_CHANNEL_NAME);
 
 		await()
