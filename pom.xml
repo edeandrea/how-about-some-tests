@@ -6,7 +6,6 @@
   <artifactId>how-about-some-tests</artifactId>
   <version>1.0-SNAPSHOT</version>
   <properties>
-    <assertj.version>3.23.1</assertj.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <failsafe.useModulePath>false</failsafe.useModulePath>
     <maven.compiler.release>17</maven.compiler.release>
@@ -95,7 +94,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
+      <version>3.23.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
