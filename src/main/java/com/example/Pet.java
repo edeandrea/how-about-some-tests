@@ -27,9 +27,7 @@ public class Pet {
 	}
 
 	public Pet(Long id, String name, String kind) {
-		this.id = id;
-		this.name = name;
-		this.kind = kind;
+		this(id, name, kind, null);
 	}
 
 	public Long getId() {
