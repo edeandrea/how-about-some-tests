@@ -20,7 +20,7 @@ class PetRepositoryTests {
 		this.petRepository.deleteAll();
 		assertThat(this.petRepository.count()).isZero();
 
-		this.petRepository.persist(new Pet(null, "fluffy", "cat"));
+		this.petRepository.persist(new Pet("fluffy", "cat"));
 
 		assertThat(this.petRepository.findPetsByKind("cat"))
 			.isNotNull()
@@ -44,8 +44,8 @@ class PetRepositoryTests {
 		assertThat(this.petRepository.count()).isZero();
 
 		this.petRepository.persist(
-			new Pet(null, "fluffy", "cat"),
-			new Pet(null, "harry", "dog")
+			new Pet("fluffy", "cat"),
+			new Pet("harry", "dog")
 		);
 
 		assertThat(this.petRepository.adoptPetIfFound("cat", "Eric"))
@@ -63,7 +63,7 @@ class PetRepositoryTests {
 
 		this.petRepository.persist(
 			new Pet(null, "fluffy", "cat", "Eric"),
-			new Pet(null, "harry", "dog")
+			new Pet("harry", "dog")
 		);
 		assertThat(this.petRepository.adoptPetIfFound("cat", "Eric"))
 			.isNotNull()

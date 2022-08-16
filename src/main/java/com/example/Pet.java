@@ -13,21 +13,25 @@ public class Pet {
 	private Long id;
 	private String name;
 	private String kind;
-
 	private String adoptedBy;
+
+	public Pet() {
+
+	}
+
+	public Pet(String name, String kind) {
+		this(null, name, kind);
+	}
+
+	public Pet(Long id, String name, String kind) {
+		this(id, name, kind, null);
+	}
 
 	public Pet(Long id, String name, String kind, String adoptedBy) {
 		this.id = id;
 		this.name = name;
 		this.kind = kind;
 		this.adoptedBy = adoptedBy;
-	}
-
-	public Pet() {
-	}
-
-	public Pet(Long id, String name, String kind) {
-		this(id, name, kind, null);
 	}
 
 	public Long getId() {
