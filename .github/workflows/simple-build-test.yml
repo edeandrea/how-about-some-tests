@@ -1,7 +1,7 @@
 name: Basic build and test
 
 env:
-  MANDREL_VERSION: "22.1.0.0-Final"
+  MANDREL_VERSION: "22.3.0.1-Final"
   MANDREL_IMAGE: "quay.io/quarkus/ubi-quarkus-mandrel"
 
 on:
