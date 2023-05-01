@@ -7,8 +7,9 @@ import static org.mockito.Mockito.*;
 import java.time.Duration;
 import java.util.Optional;
 
-import javax.enterprise.inject.Any;
-import javax.inject.Inject;
+import io.smallrye.reactive.messaging.memory.InMemoryConnector;
+import jakarta.enterprise.inject.Any;
+import jakarta.inject.Inject;
 
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +18,6 @@ import org.junit.jupiter.api.Test;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.quarkus.test.junit.mockito.InjectSpy;
-
-import io.smallrye.reactive.messaging.providers.connectors.InMemoryConnector;
 
 @QuarkusTest
 class AdoptionListenerTests {

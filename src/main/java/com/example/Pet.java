@@ -1,15 +1,18 @@
 package com.example;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "pets")
 public class Pet {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pets_seq")
+	@SequenceGenerator(name = "pets_seq", allocationSize = 1, sequenceName = "pets_seq")
 	private Long id;
 	private String name;
 	private String kind;

@@ -3,9 +3,9 @@ package com.example;
 import java.util.List;
 import java.util.Optional;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.LockModeType;
-import javax.transaction.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.LockModeType;
+import jakarta.transaction.Transactional;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.logging.Log;
@@ -20,7 +20,7 @@ public class PetRepository implements PanacheRepository<Pet> {
 	@Transactional
 	public Optional<Pet> adoptPetIfFound(String kind, String owner) {
 		Log.infof("Looking for an adoptable pet of kind '%s'", kind);
-		var pet = find("kind = ?1 AND adoptedBy IS NULL ORDER BY RAND()", kind)
+		var pet = find("kind = ?1 AND adoptedBy IS NULL ORDER BY RANDOM()", kind)
 			.page(0, 1)
 			.withLock(LockModeType.PESSIMISTIC_WRITE)
 			.firstResultOptional();

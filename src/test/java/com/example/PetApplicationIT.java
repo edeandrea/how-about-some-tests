@@ -1,7 +1,7 @@
 package com.example;
 
 import static io.restassured.RestAssured.get;
-import static javax.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.Response.Status.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.blankOrNullString;
