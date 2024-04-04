@@ -2,7 +2,7 @@ name: Basic build and test
 
 env:
   MANDREL_VERSION: "23.1.2.0-Final"
-  MANDREL_IMAGE: "quay.io/quarkus/ubi-quarkus-mandrel"
+  MANDREL_IMAGE: "quay.io/quarkus/ubi-quarkus-mandrel-builder-image"
 
 on:
   push:
@@ -107,7 +107,8 @@ jobs:
       - name: build-test-native-container
         run: |
           ./mvnw -B clean verify -Pnative \
-            -Dquarkus.native.builder-image=${{ env.MANDREL_IMAGE }}:${{ env.MANDREL_VERSION }}-java21 \
+            -Dquarkus.native.builder-image=${{ env.MANDREL_IMAGE }}:${{ env.MANDREL_VERSION }}-jdk21 \
             -Dquarkus.native.container-build=true \
             -Dquarkus.container-image.build=true \
-            -Dquarkus.http.host=0.0.0.0
+            -Dquarkus.http.host=0.0.0.0 \
+            -Dmaven.compiler.release=17
