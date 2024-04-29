@@ -8,7 +8,7 @@ import org.eclipse.microprofile.reactive.messaging.Incoming;
 
 import io.quarkus.logging.Log;
 
-import io.smallrye.common.annotation.Blocking;
+import io.smallrye.common.annotation.RunOnVirtualThread;
 
 @ApplicationScoped
 public class AdoptionListener {
@@ -24,7 +24,7 @@ public class AdoptionListener {
 	}
 
 	@Incoming(ADOPTION_REQUESTS_CHANNEL_NAME)
-	@Blocking
+	@RunOnVirtualThread
 	public void handleAdoption(AdoptionRequest adoptionRequest) {
 		Log.infof("Handling adoption for request: %s", adoptionRequest);
 		this.petRepository.adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner())

@@ -24,14 +24,15 @@ class PetRepositoryTests {
 
 		assertThat(this.petRepository.findPetsByKind("cat"))
 			.isNotNull()
-			.hasSize(1)
-			.flatExtracting(Pet::getKind, Pet::getName)
-			.containsExactly("cat", "fluffy");
+			.singleElement()
+			.extracting(Pet::getName, Pet::getKind)
+			.contains("fluffy", "cat");
 	}
 
 	@Test
 	public void noPetsByKindFound() {
 		this.petRepository.deleteAll();
+
 		assertThat(this.petRepository.count()).isZero();
 		assertThat(this.petRepository.findPetsByKind("cat"))
 			.isNotNull()
@@ -50,7 +51,6 @@ class PetRepositoryTests {
 
 		assertThat(this.petRepository.adoptPetIfFound("cat", "Eric"))
 			.isNotNull()
-			.isPresent()
 			.get()
 			.extracting(Pet::getKind, Pet::getName, Pet::getAdoptedBy)
 			.containsExactly("cat", "fluffy", "Eric");
@@ -65,6 +65,7 @@ class PetRepositoryTests {
 			new Pet(null, "fluffy", "cat", "Eric"),
 			new Pet("harry", "dog")
 		);
+
 		assertThat(this.petRepository.adoptPetIfFound("cat", "Eric"))
 			.isNotNull()
 			.isEmpty();

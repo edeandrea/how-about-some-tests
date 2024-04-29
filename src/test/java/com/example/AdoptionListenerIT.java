@@ -8,8 +8,6 @@ import java.time.Duration;
 import jakarta.ws.rs.core.Response.Status;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer;
@@ -33,11 +31,11 @@ public class AdoptionListenerIT {
 		var pet = getPet();
 		var adoptionRequest = new AdoptionRequest("Eric", pet.getKind());
 
-		this.kafkaCompanion.produceWithSerializers(new StringSerializer(), new ObjectMapperSerializer<AdoptionRequest>())
+		this.kafkaCompanion.produceWithSerializers(ObjectMapperSerializer.class.getName())
 			.fromRecords(new ProducerRecord<>(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME, adoptionRequest))
 			.awaitCompletion(Duration.ofSeconds(10));
 
-		var adoptionConsumer = this.kafkaCompanion.consumeWithDeserializers(new StringDeserializer(), new PetDeserializer())
+		var adoptionConsumer = this.kafkaCompanion.consumeWithDeserializers(PetDeserializer.class)
 			.fromTopics(AdoptionListener.ADOPTIONS_CHANNEL_NAME, 1)
 			.awaitNextRecords(1, Duration.ofSeconds(20));
 

@@ -4,17 +4,15 @@ import static io.restassured.RestAssured.get;
 import static jakarta.ws.rs.core.Response.Status.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.blankOrNullString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
 
 import io.restassured.http.ContentType;
 
@@ -25,7 +23,8 @@ class PetResourceTests {
 
 	@Test
 	public void getAll() {
-		Mockito.when(petRepository.listAll()).thenReturn(List.of(new Pet(1L, "fluffy", "cat")));
+		when(this.petRepository.listAll())
+			.thenReturn(List.of(new Pet(1L, "fluffy", "cat")));
 
 		get("/pets")
 			.then()
@@ -42,7 +41,7 @@ class PetResourceTests {
 
 	@Test
 	public void getByKind() {
-		Mockito.when(petRepository.findPetsByKind(eq("cat")))
+		when(petRepository.findPetsByKind("cat"))
 			.thenReturn(List.of(new Pet(1L, "fluffy", "cat", "Eric")));
 
 		get("/pets?kind={kind}", "cat")
@@ -54,13 +53,13 @@ class PetResourceTests {
 			.body("[0].kind", is("cat"))
 			.body("[0].adoptedBy", is("Eric"));
 
-		verify(this.petRepository).findPetsByKind(eq("cat"));
+		verify(this.petRepository).findPetsByKind("cat");
 		verifyNoMoreInteractions(this.petRepository);
 	}
 
 	@Test
 	public void getByIdFound() {
-		Mockito.when(petRepository.findByIdOptional(eq(1L)))
+		when(petRepository.findByIdOptional(1L))
 			.thenReturn(Optional.of(new Pet(1L, "fluffy", "cat", "Eric")));
 
 		get("/pets/{id}", 1L)
@@ -71,13 +70,13 @@ class PetResourceTests {
 			.body("kind", is("cat"))
 			.body("adoptedBy", is("Eric"));
 
-		verify(this.petRepository).findByIdOptional(eq(1L));
+		verify(this.petRepository).findByIdOptional(1L);
 		verifyNoMoreInteractions(this.petRepository);
 	}
 
 	@Test
 	public void getByIdNotFound() {
-		Mockito.when(petRepository.findByIdOptional(eq(1L)))
+		when(petRepository.findByIdOptional(1L))
 			.thenReturn(Optional.empty());
 
 		get("/pets/{id}", 1L)
@@ -85,7 +84,7 @@ class PetResourceTests {
 			.statusCode(NOT_FOUND.getStatusCode())
 			.body(blankOrNullString());
 
-		verify(this.petRepository).findByIdOptional(eq(1L));
+		verify(this.petRepository).findByIdOptional(1L);
 		verifyNoMoreInteractions(this.petRepository);
 	}
 }

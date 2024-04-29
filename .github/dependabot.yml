@@ -7,10 +7,6 @@ updates:
       interval: daily
     labels:
       - "version-upgrade"
-    pull-request-branch-name:
-      separator: "_"
-    ignore:
-      - dependency-name: org.apache.maven.plugins:maven-compiler-plugin
 
   - package-ecosystem: github-actions
     directory: /
@@ -19,5 +15,3 @@ updates:
       interval: daily
     labels:
       - "version-upgrade"
-    pull-request-branch-name:
-      separator: "_"

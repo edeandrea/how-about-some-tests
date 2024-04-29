@@ -7,7 +7,6 @@ import static org.mockito.Mockito.*;
 import java.time.Duration;
 import java.util.Optional;
 
-import io.smallrye.reactive.messaging.memory.InMemoryConnector;
 import jakarta.enterprise.inject.Any;
 import jakarta.inject.Inject;
 
@@ -15,9 +14,11 @@ import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
 import io.quarkus.test.junit.mockito.InjectSpy;
+
+import io.smallrye.reactive.messaging.memory.InMemoryConnector;
 
 @QuarkusTest
 class AdoptionListenerTests {
@@ -42,7 +43,7 @@ class AdoptionListenerTests {
 		var pet = new Pet(1L, "fluffy", "cat", "Eric");
 		var adoptionRequest = new AdoptionRequest("Eric", pet.getKind());
 
-		when(this.petRepository.adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.owner())))
+		when(this.petRepository.adoptPetIfFound(pet.getKind(), adoptionRequest.owner()))
 			.thenReturn(Optional.of(pet));
 
 		this.emitterConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME).send(adoptionRequest);
@@ -59,7 +60,7 @@ class AdoptionListenerTests {
 			.usingRecursiveComparison()
 			.isEqualTo(new Pet(pet.getId(), pet.getName(), pet.getKind(), adoptionRequest.owner()));
 
-		verify(this.petRepository).adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.owner()));
+		verify(this.petRepository).adoptPetIfFound(pet.getKind(), adoptionRequest.owner());
 		verify(this.adoptionListener).handleAdoption(any(AdoptionRequest.class));
 		verifyNoMoreInteractions(this.petRepository);
 	}
@@ -69,12 +70,12 @@ class AdoptionListenerTests {
 		var pet = new Pet(1L, "fluffy", "cat");
 		var adoptionRequest = new AdoptionRequest("Eric", pet.getKind());
 
-		when(this.petRepository.adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.owner())))
+		when(this.petRepository.adoptPetIfFound(pet.getKind(), adoptionRequest.owner()))
 			.thenReturn(Optional.empty());
 
 		this.emitterConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME).send(adoptionRequest);
 
-		verify(this.petRepository, timeout(10 * 1000)).adoptPetIfFound(eq(pet.getKind()), eq(adoptionRequest.owner()));
+		verify(this.petRepository, timeout(10 * 1000)).adoptPetIfFound(pet.getKind(), adoptionRequest.owner());
 		verify(this.adoptionListener, timeout(10 * 1000)).handleAdoption(any(AdoptionRequest.class));
 		verifyNoMoreInteractions(this.petRepository);
 	}
