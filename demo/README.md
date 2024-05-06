@@ -1,7 +1,7 @@
 This directory contains the demo "script".
 
 - [`demo-script-source.adoc`](demo-script-source.adoc) is the asciidoc file containing the "script" used to go through the demo. It has all kinds of include directives to include code snippets directly from the repository which don't render properly as html when viewed on GitHub.
-- [`demo-script.adoc`](demo-script.adoc) is the asciidoc file containing the "script" used to go through the demo. It is reduced from [`demo-script-source.adoc`](demo-script-source.adoc) by the [`reduce-remo-script.yml`](../.github/workflows/generate-demo-script.yml) GitHub action. This is necessary because AsciiDoc preview on GitHub does not support the include directive.
+- [`demo-script.adoc`](demo-script.adoc) is the asciidoc file containing the "script" used to go through the demo. It is reduced from [`demo-script-source.adoc`](demo-script-source.adoc) by the [`generate-demo-script.yml`](../.github/workflows/generate-demo-script.yml) GitHub action. This is necessary because AsciiDoc preview on GitHub does not support the include directive.
 - [`demo-pdf-theme.yml`](demo-pdf-theme.yml) is the [Asciidoctor PDF](https://docs.asciidoctor.org/pdf-converter/latest/) theme so that when converting to PDF things line up properly on pages.
 
 To create a pdf:
