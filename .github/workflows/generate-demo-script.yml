@@ -1,0 +1,44 @@
+name: Reduce demo-script
+
+on:
+  workflow_run:
+    workflows:
+      - "Basic build and test"
+    branches:
+      - main
+    types:
+      - completed
+    workflow_dispatch:
+
+concurrency:
+  group: "workflow = ${{ github.workflow }}, ref = ${{ github.event.workflow_run.head_branch || github.event.ref || github.ref }}"
+  cancel-in-progress: false
+
+jobs:
+  reduce-demo-script:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Asciidoctor Reducer
+      run: sudo gem install asciidoctor-reducer
+
+    - name: Install Asciidoctor PDF
+      run: sudo gem install asciidoctor-pdf
+
+    - name: Reduce README
+      working-directory: demo
+      # to preserve preprocessor conditionals, add the --preserve-conditionals option
+      run: asciidoctor-reducer -o demo-script.adoc demo-script-source.adoc
+
+    - name: Generate PDF
+      working-directory: demo
+      run: asciidoctor-pdf --theme demo-pdf -a pdf-themesdir=. -o demo-script.pdf demo-script-source.adoc
+
+    - name: Commit and Push README
+      uses: EndBug/add-and-commit@v9
+      with:
+        default_author: github_actions
+        message: "Reducing and generating demo pdf"
+        add: '["demo/demo-script.adoc", "demo/demo-script.pdf"]'
+        pathspec_error_handling: exitImmediately
