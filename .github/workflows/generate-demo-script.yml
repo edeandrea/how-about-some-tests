@@ -56,7 +56,7 @@ jobs:
             demo/demo-script.adoc
             demo/demo-script.pdf
           commit-message: "Generate demo script (from ${{ github.workflow }} run # ${{ github.run_number }})"
-          branch: create-deploy-resources/sourceref
+          branch: generate-resources/sourceref
           branch-suffix: short-commit-hash
           delete-branch: true
           base: main
