@@ -12,6 +12,7 @@ import io.quarkus.logging.Log;
 
 @ApplicationScoped
 public class PetRepository implements PanacheRepository<Pet> {
+	// tag::petRepositoryMethods[]
 	public List<Pet> findPetsByKind(String kind) {
 		Log.infof("Looking for all pets of kind '%s'", kind);
 		return list("kind", kind);
@@ -36,4 +37,5 @@ public class PetRepository implements PanacheRepository<Pet> {
 
 		return pet;
 	}
+	// end::petRepositoryMethods[]
 }

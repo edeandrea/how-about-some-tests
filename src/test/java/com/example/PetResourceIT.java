@@ -13,7 +13,7 @@ import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.restassured.http.ContentType;
 
 @QuarkusIntegrationTest
-public class PetApplicationIT {
+public class PetResourceIT {
 	private static final int NUM_RECORDS = 3;
 
 	@Test

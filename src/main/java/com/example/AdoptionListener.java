@@ -15,6 +15,7 @@ public class AdoptionListener {
 	static final String ADOPTIONS_CHANNEL_NAME = "adoptions";
 	static final String ADOPTION_REQUESTS_CHANNEL_NAME = "adoption-requests";
 
+	// tag::AdoptionListenerAttributes[]
 	private final PetRepository petRepository;
 	private final Emitter<Pet> petEmitter;
 
@@ -22,12 +23,15 @@ public class AdoptionListener {
 		this.petRepository = petRepository;
 		this.petEmitter = petEmitter;
 	}
+	// end::AdoptionListenerAttributes[]
 
 	@Incoming(ADOPTION_REQUESTS_CHANNEL_NAME)
 	@RunOnVirtualThread
 	public void handleAdoption(AdoptionRequest adoptionRequest) {
+		// tag::handleAdoption[]
 		Log.infof("Handling adoption for request: %s", adoptionRequest);
 		this.petRepository.adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner())
 			.ifPresent(this.petEmitter::send);
+		// end::handleAdoption[]
 	}
 }

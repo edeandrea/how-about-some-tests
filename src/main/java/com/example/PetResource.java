@@ -16,26 +16,28 @@ import io.smallrye.common.annotation.RunOnVirtualThread;
 
 @Path("/pets")
 @Produces(MediaType.APPLICATION_JSON)
+@RunOnVirtualThread
 public class PetResource {
+	// tag::petResourceContents[]
 	private final PetRepository petRepository;
 
 	public PetResource(PetRepository petRepository) {
 		this.petRepository = petRepository;
 	}
 
-	@RunOnVirtualThread
 	@GET
 	public List<Pet> getAll(@QueryParam("kind") Optional<String> kind) {
 		return kind.map(this.petRepository::findPetsByKind)
 			.orElseGet(this.petRepository::listAll);
 	}
 
-	@RunOnVirtualThread
 	@GET
 	@Path("/{id}")
 	public Response getPetById(@PathParam("id") Long id) {
 		return this.petRepository.findByIdOptional(id)
-			.map(pet -> Response.ok(pet).build())
-			.orElseGet(() -> Response.status(Status.NOT_FOUND).build());
+			.map(Response::ok)
+			.orElseGet(() -> Response.status(Status.NOT_FOUND))
+			.build();
 	}
+	// end::petResourceContents[]
 }

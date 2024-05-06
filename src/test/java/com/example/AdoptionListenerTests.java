@@ -30,12 +30,12 @@ class AdoptionListenerTests {
 
 	@Inject
 	@Any
-	InMemoryConnector emitterConnector;
+	InMemoryConnector inMemoryConnector;
 
 	@BeforeEach
 	public void beforeEach() {
 		// Clear the emitter sink between tests
-		this.emitterConnector.sink(AdoptionListener.ADOPTIONS_CHANNEL_NAME).clear();
+		this.inMemoryConnector.sink(AdoptionListener.ADOPTIONS_CHANNEL_NAME).clear();
 	}
 
 	@Test
@@ -43,16 +43,24 @@ class AdoptionListenerTests {
 		var pet = new Pet(1L, "fluffy", "cat", "Eric");
 		var adoptionRequest = new AdoptionRequest("Eric", pet.getKind());
 
+		// tag::adoptablePetFound[]
+		// Set up mock
 		when(this.petRepository.adoptPetIfFound(pet.getKind(), adoptionRequest.owner()))
 			.thenReturn(Optional.of(pet));
 
-		this.emitterConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME).send(adoptionRequest);
-		var sink = this.emitterConnector.sink(AdoptionListener.ADOPTIONS_CHANNEL_NAME);
+		// Send request to channel
+		this.inMemoryConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME)
+			.send(adoptionRequest);
 
+		// Create sink
+		var sink = this.inMemoryConnector.sink(AdoptionListener.ADOPTIONS_CHANNEL_NAME);
+
+		// Wait for messages to arrive in sink
 		await()
 			.atMost(Duration.ofSeconds(10))
 			.until(() -> sink.received().size() == 1);
 
+		// Perform assertions on received message(s)
 		assertThat(sink.received())
 			.isNotNull()
 			.singleElement()
@@ -60,9 +68,11 @@ class AdoptionListenerTests {
 			.usingRecursiveComparison()
 			.isEqualTo(new Pet(pet.getId(), pet.getName(), pet.getKind(), adoptionRequest.owner()));
 
+		// Verify interactions
 		verify(this.petRepository).adoptPetIfFound(pet.getKind(), adoptionRequest.owner());
 		verify(this.adoptionListener).handleAdoption(any(AdoptionRequest.class));
 		verifyNoMoreInteractions(this.petRepository);
+		// end::adoptablePetFound[]
 	}
 
 	@Test
@@ -70,13 +80,19 @@ class AdoptionListenerTests {
 		var pet = new Pet(1L, "fluffy", "cat");
 		var adoptionRequest = new AdoptionRequest("Eric", pet.getKind());
 
+		// tag::adoptablePetNotFound[]
+		// Set up mock
 		when(this.petRepository.adoptPetIfFound(pet.getKind(), adoptionRequest.owner()))
 			.thenReturn(Optional.empty());
 
-		this.emitterConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME).send(adoptionRequest);
+		// Send request to channel
+		this.inMemoryConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME)
+			.send(adoptionRequest);
 
-		verify(this.petRepository, timeout(10 * 1000)).adoptPetIfFound(pet.getKind(), adoptionRequest.owner());
-		verify(this.adoptionListener, timeout(10 * 1000)).handleAdoption(any(AdoptionRequest.class));
+		// Verify interactions (with timeout)
+		verify(this.petRepository, timeout(10_000)).adoptPetIfFound(pet.getKind(), adoptionRequest.owner());
+		verify(this.adoptionListener, timeout(10_000)).handleAdoption(any(AdoptionRequest.class));
 		verifyNoMoreInteractions(this.petRepository);
+		// end::adoptablePetNotFound[]
 	}
 }

@@ -1,0 +1,7 @@
+extends: default
+base:
+  font-size: 75%
+  line-height: 1
+code:
+  font-size: 75%
+  line-height: 1.15
