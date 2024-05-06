@@ -56,10 +56,8 @@ jobs:
             demo/demo-script.adoc
             demo/demo-script.pdf
           commit-message: "Generate demo script (from ${{ github.workflow }} run # ${{ github.run_number }})"
-          branch: generate-resources/sourceref
-          branch-suffix: short-commit-hash
+          branch: generate-demo-script-resources
           delete-branch: true
-          base: main
           title: "Generate demo script (from ${{ github.workflow }} run # ${{ github.run_number }})"
           body: "Generated demo script changes from [${{ github.workflow }} run # ${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}), which was triggered by commit ${{ env.REF }}."
 
