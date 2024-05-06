@@ -23,17 +23,13 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Calculate Branch (workflow_run event)
+      - name: Calculate REF (workflow_run event)
         if: github.event_name == 'workflow_run'
-        run: |
-          echo "REF=${{ github.event.workflow_run.head_commit.id }}" >> $GITHUB_ENV
-          echo "BRANCH=${{ github.event.workflow_run.head_branch }}" >> $GITHUB_ENV
+        run: echo "REF=${{ github.event.workflow_run.head_commit.id }}" >> $GITHUB_ENV
 
-      - name: Calculate Branch (workflow_dispatch event)
+      - name: Calculate REF (workflow_dispatch event)
         if: github.event_name == 'workflow_dispatch'
-        run: |
-          echo "REF=${{ github.sha }}" >> $GITHUB_ENV
-          echo "BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
+        run: echo "REF=${{ github.sha }}" >> $GITHUB_ENV
 
       - uses: actions/checkout@v4
 
@@ -63,21 +59,10 @@ jobs:
           branch: create-deploy-resources/sourceref
           branch-suffix: short-commit-hash
           delete-branch: true
-          base: ${{ env.BRANCH }}
+          base: main
           title: "Generate demo script (from ${{ github.workflow }} run # ${{ github.run_number }})"
           body: "Generated demo script changes from [${{ github.workflow }} run # ${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}), which was triggered by commit ${{ env.REF }}."
 
       - name: Merge PR
         if: (steps.create-pr.outputs.pull-request-operation == 'created') && (steps.create-pr.outputs.pull-request-number)
-        run: |
-#          echo "${{ secrets.DEPENDABOT_AUTOMERGE_TOKEN }}" | gh auth login --with-token
-#          gh pr review --approve ${{ steps.create-pr.outputs.pull-request-number }}
-          gh pr merge --squash --admin ${{ steps.create-pr.outputs.pull-request-number }}
-
-#      - name: Commit and Push README
-#        uses: EndBug/add-and-commit@v9
-#        with:
-#          default_author: user_info
-#          message: "Reducing and generating demo pdf"
-#          add: '["demo/demo-script.adoc", "demo/demo-script.pdf"]'
-#          pathspec_error_handling: exitImmediately
+        run: gh pr merge --squash --admin ${{ steps.create-pr.outputs.pull-request-number }}
