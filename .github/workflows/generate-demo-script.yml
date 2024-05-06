@@ -66,5 +66,5 @@ jobs:
       - name: Merge PR
         if: (steps.create-pr.outputs.pull-request-operation == 'created') && (steps.create-pr.outputs.pull-request-number)
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.AUTOMERGE_TOKEN }}
         run: gh pr merge --squash --admin ${{ steps.create-pr.outputs.pull-request-number }}
