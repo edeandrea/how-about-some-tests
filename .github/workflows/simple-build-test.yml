@@ -2,7 +2,6 @@ name: Basic build and test
 
 env:
   MANDREL_VERSION: "23.1.2.0-Final"
-  MANDREL_IMAGE: "quay.io/quarkus/ubi-quarkus-mandrel-builder-image"
 
 on:
   push:
@@ -81,7 +80,7 @@ jobs:
         run: |
           download_url="https://github.com/graalvm/mandrel/releases/download/mandrel-${MANDREL_VERSION}/mandrel-java21-linux-amd64-${MANDREL_VERSION}.tar.gz"
           wget -q -O mandrel-${{ env.MANDREL_VERSION }}-21.tar.gz $download_url
-          
+
       - name: Setup Maven+OpenJDK Distro
         uses: actions/setup-java@v4
         with:
@@ -109,7 +108,6 @@ jobs:
       - name: build-test-native-container
         run: |
           ./mvnw -B clean verify -Pnative \
-            -Dquarkus.native.builder-image=${{ env.MANDREL_IMAGE }}:jdk-21 \
             -Dquarkus.native.container-build=true \
             -Dquarkus.container-image.build=true \
             -Dquarkus.http.host=0.0.0.0 \
