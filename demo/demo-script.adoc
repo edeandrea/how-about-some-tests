@@ -1,0 +1,372 @@
+:autofit-option:
+:pdf-page-margin: [0.15in, 0.15in, 0.15in, 0.15in]
+
+==== Create project & scaffolding
+. New project wizard
+  * Java 21
+  * Maven
+  * No sample code
+  * Dependencies:
+  ** REST Jackson
+  ** Hibernate ORM Panache
+  ** PostgreSQL JDBC Driver
+  ** Micrometer prometheus
+  ** OpenTelemetry
+  ** OpenAPI
+  ** Health
+  ** Jib
+. Edit `pom.xml`
+.. Add OTeL JDBC dependency (`tdd 1 - pomOtelJdbc` live template)
+.. Add test dependencies (`tdd 2 - pomTestDeps` live template)
+. Go into link:../src/main/resources/application.properties[`src/main/resources/application.properties`] and add base config (`tdd 3 - baseConfig` live template)
+
+'''
+
+==== Create Entity
+. Start dev mode
+. Discuss `Hibernate ORM is disabled because no JPA entities were found` & `Dev Services for default datasource (postgresql) started`
+  * Show & explain Dev UI
+. Create `Pet` class
+  * Add fields (`tdd 4 - petFields` live template)
+  * Add getters/setters (IntelliJ assist)
+  * Add `toString`/`hashCode`/`equals` (IntelliJ assist)
+  * Add constructors (`tdd 5 - petConstructors` live template)
+  * Turn into JPA Entity (`tdd 6 - petAnnotations` live template)
+. _Optional_: Show data explorer that table was created
+. Add `src/main/resources/import.sql` file
+  * Use `tdd 7 - importsql` live template
+. _Optional_: Refresh data explorer showing that data is now in the table
+
+<<<
+
+==== Create Repository layer tests
+. Back in dev mode console point out `Tests paused`
+  * Explain `No tests found` (duh!)
+. Create `src/test/java/com/example/PetRepositoryTests.java`
+  * Annotate with `@QuarkusTest`
+. Bring in test stubs with `tdd 8 - petRepositoryTests` live template
+  * Notice in console that as soon as saved tests all run to success
+. Add `@TestTransaction` annotation & explain
+  * Again all tests run when saving
+. Add `@Inject PetRepository`
+  * Obviously this does not compile because `PetRepository` doesn't exist
+  * Use IntelliJ assist to create class
+. Add `@ApplicationScoped` annotation so it can be found as a bean
+. Make `PetRepository` implement `PanacheRepository<Pet>`
+. Add method stubs with `tdd 9 - petRepository` live template
+. Return to `PetRepositoryTests` and implement `petsByKindFound` following steps:
+
+[source,java]
+----
+// Delete everything from the repo
+this.petRepository.deleteAll();
+
+// Assert the repository is empty
+assertThat(this.petRepository.count()).isZero();
+
+// Persist a new pet to the repo
+this.petRepository.persist(new Pet("fluffy", "cat"));
+
+// Assert that finding the pets by kind returns the correct result
+assertThat(this.petRepository.findPetsByKind("cat"))
+	.isNotNull()
+	.singleElement()
+	.extracting(Pet::getName, Pet::getKind)
+	.contains("fluffy", "cat");
+----
+
+[start=10]
+. Implement `noPetsByKindFound` following steps:
+
+[source,java]
+----
+// Delete everything from the repo
+this.petRepository.deleteAll();
+
+// Assert the repository is empty
+assertThat(this.petRepository.count()).isZero();
+
+// Assert that finding the pets by kind returns empty
+assertThat(this.petRepository.findPetsByKind("cat"))
+	.isNotNull()
+	.isEmpty();
+----
+
+[start=11]
+. Implement `adoptFoundPet` following steps:
+
+[source,java]
+----
+// Delete everything from the repo
+this.petRepository.deleteAll();
+
+// Assert the repository is empty
+assertThat(this.petRepository.count()).isZero();
+
+// Persist some pets
+this.petRepository.persist(
+	new Pet("fluffy", "cat"),
+	new Pet("harry", "dog")
+);
+
+// Assert that adopting a found pet is correct
+assertThat(this.petRepository.adoptPetIfFound("cat", "Eric"))
+	.isNotNull()
+	.get()
+	.extracting(Pet::getKind, Pet::getName, Pet::getAdoptedBy)
+	.containsExactly("cat", "fluffy", "Eric");
+----
+
+<<<
+
+[start=12]
+. Implement `noAdoptablePetFound` following steps:
+
+[source,java]
+----
+// Delete everything from the repo
+this.petRepository.deleteAll();
+
+// Assert the repository is empty
+assertThat(this.petRepository.count()).isZero();
+
+// Persist some pets
+this.petRepository.persist(
+	new Pet(null, "fluffy", "cat", "Eric"),
+	new Pet("harry", "dog")
+);
+
+// Assert that no pet is found for adoption
+assertThat(this.petRepository.adoptPetIfFound("cat", "Eric"))
+	.isNotNull()
+	.isEmpty();
+----
+
+[start=13]
+. At this point all 4 tests should be passing
+
+==== Implement Repository
+[source,java]
+----
+public List<Pet> findPetsByKind(String kind) {
+	Log.infof("Looking for all pets of kind '%s'", kind);
+	return list("kind", kind);
+}
+
+@Transactional
+public Optional<Pet> adoptPetIfFound(String kind, String owner) {
+	Log.infof("Looking for an adoptable pet of kind '%s'", kind);
+	var pet = find("kind = ?1 AND adoptedBy IS NULL ORDER BY RANDOM()", kind)
+		.page(0, 1)
+		.withLock(LockModeType.PESSIMISTIC_WRITE)
+		.firstResultOptional();
+
+	pet.ifPresentOrElse(
+		p -> {
+			Log.infof("Found pet for adoption: %s", pet);
+			p.setAdoptedBy(owner);
+			persist(p);
+		},
+		() -> Log.infof("No pet of kind '%s' available for adoption", kind)
+	);
+
+	return pet;
+}
+----
+
+==== Create REST layer tests
+. Create `src/test/java/com/example/PetResourceTests.java`
+  * Annotate with `@QuarkusTest`
+. Add `@InjectMock PetRepository`
+. Bring in test stubs with `tdd 10 - petResourceTests` live template
+  * Notice in console that as soon as saved tests all run to success
+. Implement `getAll` method
+
+[source,java]
+----
+// Set up mock to return a pet when repo.listAll() is called
+when(this.petRepository.listAll())
+	.thenReturn(List.of(new Pet(1L, "fluffy", "cat")));
+
+// Execute GET to /pets & assert
+get("/pets").then()
+	.contentType(ContentType.JSON)
+	.statusCode(OK.getStatusCode())
+	.body("$.size()", is(1))
+	.body("[0].name", is("fluffy"))
+	.body("[0].kind", is("cat"))
+	.body("[0].adoptedBy", blankOrNullString());
+
+// Verify interactions
+verify(this.petRepository).listAll();
+verifyNoMoreInteractions(this.petRepository);
+----
+
+[start=5]
+. Highlight all remaining tests and implement in one shot with `tdd 11 - petResourceTestsOthers` live template
+
+<<<
+
+==== Implement REST layer
+. Create `src/main/java/com/example/PetResource.java`
+. Explain how we know what we need to create
+  * `/pets` returns all `Pet`s
+  * `/pets?kind={kind}` returns all `Pet`s of a certain kind
+  * `/pets/{id}` returns a `Pet` given an id
+  ** *OR* returns a `404` if that `Pet` is not found
+. Implement methods:
+
+[source,java]
+----
+private final PetRepository petRepository;
+
+public PetResource(PetRepository petRepository) {
+	this.petRepository = petRepository;
+}
+
+@GET
+public List<Pet> getAll(@QueryParam("kind") Optional<String> kind) {
+	return kind.map(this.petRepository::findPetsByKind)
+		.orElseGet(this.petRepository::listAll);
+}
+
+@GET
+@Path("/{id}")
+public Response getPetById(@PathParam("id") Long id) {
+	return this.petRepository.findByIdOptional(id)
+		.map(Response::ok)
+		.orElseGet(() -> Response.status(Status.NOT_FOUND))
+		.build();
+}
+----
+
+[start=4]
+. Add `@RunOnVirtualThread` to class and explain
+. _Optional_: Run `http :8080/pets` to see all pets
+. _Optional_: Run `http ":8080/pets?kind=cat"` to see all cats
+. _Optional_: Run `http ":8080/pets?kind=horse"` to see that there aren't any horses
+. _Optional_: Run `http :8080/pets/1` to see a certain pet
+. _Optional_: Run `http :8080/pets/5` to see a pet not found (`404` error)
+
+'''
+
+==== Set up for Kafka
+. Explain that now we have to listen on Kafka for incoming adoption request messages
+  * If we have an available pet, process the adoption and put the adoption message on another Kafka topic
+  * If we don't have an available pet, do nothing
+. In new terminal add Kafka dependency with `quarkus ext add messaging-kafka`
+. Open link:../pom.xml[`pom.xml`] and add Kafka test dependencies (`tdd 12 - pomKafkaTestDeps` live template)
+. Go back to dev mode terminal to see reload
+  * And also see that there is now a Kafka broker running (can verify in dev ui)
+. Go into link:../src/main/resources/application.properties[`src/main/resources/application.properties`] and add kafka config (`tdd 13 - petkafkaconfig` live template)
+
+'''
+
+==== Create AdoptionRequest
+[source,java]
+----
+@RegisterForReflection
+public record AdoptionRequest(String owner, String kind) { }
+----
+
+<<<
+
+==== Create AdoptionListenerTests
+. Create `src/test/java/com/example/AdoptionListenerTests.java`
+. Add `@QuarkusTest` annotation to class
+. Use `tdd 14 - adoptionListenerTests` live template to insert class outline
+. Explain that we will need an `AdoptionListener` class
+  * Use IntelliJ assist to create class from field
+  * Add `@ApplicationScoped` to the class to add it as a bean
+. Add fields to `AdoptionListener` with `tdd 15 - adoptionListenerFields` live template
+. Implement `adoptablePetFound` following steps:
+
+[source,java]
+----
+// Set up mock
+when(this.petRepository.adoptPetIfFound(pet.getKind(), adoptionRequest.owner()))
+	.thenReturn(Optional.of(pet));
+
+// Send request to channel
+this.inMemoryConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME)
+	.send(adoptionRequest);
+
+// Create sink
+var sink = this.inMemoryConnector.sink(AdoptionListener.ADOPTIONS_CHANNEL_NAME);
+
+// Wait for messages to arrive in sink
+await()
+	.atMost(Duration.ofSeconds(10))
+	.until(() -> sink.received().size() == 1);
+
+// Perform assertions on received message(s)
+assertThat(sink.received())
+	.isNotNull()
+	.singleElement()
+	.extracting(Message::getPayload)
+	.usingRecursiveComparison()
+	.isEqualTo(new Pet(pet.getId(), pet.getName(), pet.getKind(), adoptionRequest.owner()));
+
+// Verify interactions
+verify(this.petRepository).adoptPetIfFound(pet.getKind(), adoptionRequest.owner());
+verify(this.adoptionListener).handleAdoption(any(AdoptionRequest.class));
+verifyNoMoreInteractions(this.petRepository);
+----
+
+[start=7]
+. Notice `handleAdoption` method doesn't exist
+  * Use IntelliJ assist to create it
+. Add annotations to the `handleAdoption` method using the `tdd 16 - adoptionListenerHandleAdoptionAnnotations` live template
+. Implement `adoptablePetNotFound` following steps:
+
+[source,java]
+----
+// Set up mock
+when(this.petRepository.adoptPetIfFound(pet.getKind(), adoptionRequest.owner()))
+	.thenReturn(Optional.empty());
+
+// Send request to channel
+this.inMemoryConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME)
+	.send(adoptionRequest);
+
+// Verify interactions (with timeout)
+verify(this.petRepository, timeout(10_000)).adoptPetIfFound(pet.getKind(), adoptionRequest.owner());
+verify(this.adoptionListener, timeout(10_000)).handleAdoption(any(AdoptionRequest.class));
+verifyNoMoreInteractions(this.petRepository);
+----
+
+[start=10]
+. Tests should still be failing.
+  * Now we need to implement `AdoptionListener`
+
+<<<
+
+==== Implement AdoptionListener
+. Add attributes:
+
+[source,java]
+----
+private final PetRepository petRepository;
+private final Emitter<Pet> petEmitter;
+
+public AdoptionListener(PetRepository petRepository, @Channel(ADOPTIONS_CHANNEL_NAME) Emitter<Pet> petEmitter) {
+	this.petRepository = petRepository;
+	this.petEmitter = petEmitter;
+}
+----
+
+[start=2]
+. Implement `handleAdoption`:
+
+[source,java]
+----
+Log.infof("Handling adoption for request: %s", adoptionRequest);
+this.petRepository.adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner())
+	.ifPresent(this.petEmitter::send);
+----
+
+'''
+
+==== Integration tests (if time permits)
+. Use `tdd - petResourceIT` live template for `PetResourceIT`
+. Use `tdd - adoptionListenerIT` live template for AdoptionListenerIT`
