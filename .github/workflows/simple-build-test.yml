@@ -9,7 +9,7 @@ on:
     paths-ignore:
       - '**/*.md'
       - '.github/dependabot.yml'
-      - '.github/denerate-demo-script.yml'
+      - '.github/generate-demo-script.yml'
       - 'demo/demo-script.adoc'
       - 'demo/demo-script.pdf'
     branches:
@@ -25,7 +25,7 @@ on:
     paths-ignore:
       - '**/*.md'
       - '.github/dependabot.yml'
-      - '.github/denerate-demo-script.yml'
+      - '.github/generate-demo-script.yml'
       - 'demo/demo-script.adoc'
       - 'demo/demo-script.pdf'
 
