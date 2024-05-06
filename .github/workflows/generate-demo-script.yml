@@ -1,4 +1,4 @@
-name: Reduce demo-script
+name: Generate demo-script
 
 on:
   workflow_run:
