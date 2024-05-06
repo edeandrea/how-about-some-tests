@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  reduce-demo-script:
+  generate-demo-script-resources:
     if: ((github.event_name == 'workflow_dispatch') || ((github.event_name == 'workflow_run') && ((github.event.workflow_run.event == 'push') || (github.event.workflow_run.event == 'workflow_dispatch')) && (github.event.workflow_run.conclusion == 'success')))
     runs-on: ubuntu-latest
     permissions:
@@ -65,4 +65,6 @@ jobs:
 
       - name: Merge PR
         if: (steps.create-pr.outputs.pull-request-operation == 'created') && (steps.create-pr.outputs.pull-request-number)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh pr merge --squash --admin ${{ steps.create-pr.outputs.pull-request-number }}
