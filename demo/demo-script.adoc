@@ -210,8 +210,8 @@ verifyNoMoreInteractions(this.petRepository);
 ==== Implement REST layer
 . Create `src/main/java/com/example/PetResource.java`
 . Explain how we know what we need to create
-  * `/pets` returns all `Pet`s
-  * `/pets?kind={kind}` returns all `Pet`s of a certain kind
+  * `/pets` returns all `Pet` s
+  * `/pets?kind={kind}` returns all `Pet` s of a certain kind
   * `/pets/{id}` returns a `Pet` given an id
   ** *OR* returns a `404` if that `Pet` is not found
 . Implement methods:
@@ -369,4 +369,4 @@ this.petRepository.adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner
 
 ==== Integration tests (if time permits)
 . Use `tdd - petResourceIT` live template for `PetResourceIT`
-. Use `tdd - adoptionListenerIT` live template for AdoptionListenerIT`
+. Use `tdd - adoptionListenerIT` live template for AdoptionListenerIT
