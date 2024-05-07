@@ -117,8 +117,8 @@ include::../src/test/java/com/example/PetResourceTests.java[indent=0,tag=getAll]
 ==== Implement REST layer
 . Create `src/main/java/com/example/PetResource.java`
 . Explain how we know what we need to create
-  * `/pets` returns all `Pet`s
-  * `/pets?kind={kind}` returns all `Pet`s of a certain kind
+  * `/pets` returns all `Pet` s
+  * `/pets?kind={kind}` returns all `Pet` s of a certain kind
   * `/pets/{id}` returns a `Pet` given an id
   ** *OR* returns a `404` if that `Pet` is not found
 . Implement methods:
@@ -210,4 +210,4 @@ include::../src/main/java/com/example/AdoptionListener.java[indent=0,tag=handleA
 
 ==== Integration tests (if time permits)
 . Use `tdd - petResourceIT` live template for `PetResourceIT`
-. Use `tdd - adoptionListenerIT` live template for AdoptionListenerIT`
+. Use `tdd - adoptionListenerIT` live template for AdoptionListenerIT
