@@ -11,6 +11,7 @@ on:
       - '.github/generate-demo-script.yml'
       - 'demo/demo-script.adoc'
       - 'demo/demo-script.pdf'
+      - 'demo/intellij-live-templates/**'
     branches:
       - main
   pull_request:
@@ -27,6 +28,7 @@ on:
       - '.github/generate-demo-script.yml'
       - 'demo/demo-script.adoc'
       - 'demo/demo-script.pdf'
+      - 'demo/intellij-live-templates/**'
 
 concurrency:
   group: "workflow = ${{ github.workflow }}, ref = ${{ github.event.ref }}, pr = ${{ github.event.pull_request.id }}"
