@@ -88,7 +88,7 @@ include::../src/test/java/com/example/PetRepositoryTests.java[indent=0,tag=noAdo
 ----
 
 [start=13]
-. At this point all 4 tests should be passing
+. At this point all 4 tests should be failing!
 
 ==== Implement Repository
 [source,java]
