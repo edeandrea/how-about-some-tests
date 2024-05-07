@@ -32,7 +32,7 @@ class PetRepositoryTests {
 			.isNotNull()
 			.singleElement()
 			.extracting(Pet::getName, Pet::getKind)
-			.contains("fluffy", "cat");
+			.containsExactly("fluffy", "cat");
 		// end::petsByKindFound[]
 	}
 

@@ -40,8 +40,7 @@
 <<<
 
 ==== Create Repository layer tests
-. Back in dev mode console point out `Tests paused`
-  * Explain `No tests found` (duh!)
+. Back in dev mode console point out `No tests found` (duh!)
 . Create `src/test/java/com/example/PetRepositoryTests.java`
   * Annotate with `@QuarkusTest`
 . Bring in test stubs with `tdd 8 - petRepositoryTests` live template
