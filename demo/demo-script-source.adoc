@@ -149,18 +149,18 @@ include::../src/main/java/com/example/PetResource.java[indent=0,tag=petResourceC
 
 '''
 
-==== Create AdoptionRequest
+==== Create AdoptionListenerTests
+. Create `src/test/java/com/example/AdoptionListenerTests.java`
+. Add `@QuarkusTest` annotation to class
+. Use `tdd 14 - adoptionListenerTests` live template to insert class outline
+. Explain that we will need an `AdoptionRequest` class - create it
+
 [source,java]
 ----
 include::../src/main/java/com/example/AdoptionRequest.java[indent=0,tag=adoptionRequest]
 ----
 
-<<<
-
-==== Create AdoptionListenerTests
-. Create `src/test/java/com/example/AdoptionListenerTests.java`
-. Add `@QuarkusTest` annotation to class
-. Use `tdd 14 - adoptionListenerTests` live template to insert class outline
+[start=5]
 . Explain that we will need an `AdoptionListener` class
   * Use IntelliJ assist to create class from field
   * Add `@ApplicationScoped` to the class to add it as a bean
@@ -172,7 +172,7 @@ include::../src/main/java/com/example/AdoptionRequest.java[indent=0,tag=adoption
 include::../src/test/java/com/example/AdoptionListenerTests.java[indent=0,tag=adoptablePetFound]
 ----
 
-[start=7]
+[start=8]
 . Notice `handleAdoption` method doesn't exist
   * Use IntelliJ assist to create it
 . Add annotations to the `handleAdoption` method using the `tdd 16 - adoptionListenerHandleAdoptionAnnotations` live template
@@ -183,7 +183,7 @@ include::../src/test/java/com/example/AdoptionListenerTests.java[indent=0,tag=ad
 include::../src/test/java/com/example/AdoptionListenerTests.java[indent=0,tag=adoptablePetNotFound]
 ----
 
-[start=10]
+[start=11]
 . Tests should still be failing.
   * Now we need to implement `AdoptionListener`
 
