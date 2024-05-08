@@ -153,7 +153,7 @@ include::../src/main/java/com/example/PetResource.java[indent=0,tag=petResourceC
 . Create `src/test/java/com/example/AdoptionListenerTests.java`
 . Add `@QuarkusTest` annotation to class
 . Use `tdd 14 - adoptionListenerTests` live template to insert class outline
-. Explain that we will need an `AdoptionRequest` class - create it
+. Explain that we will need an `AdoptionRequest` class - create it using IntelliJ assist
 
 [source,java]
 ----
