@@ -261,19 +261,19 @@ public Response getPetById(@PathParam("id") Long id) {
 
 '''
 
-==== Create AdoptionRequest
+==== Create AdoptionListenerTests
+. Create `src/test/java/com/example/AdoptionListenerTests.java`
+. Add `@QuarkusTest` annotation to class
+. Use `tdd 14 - adoptionListenerTests` live template to insert class outline
+. Explain that we will need an `AdoptionRequest` class - create it using IntelliJ assist
+
 [source,java]
 ----
 @RegisterForReflection
 public record AdoptionRequest(String owner, String kind) { }
 ----
 
-<<<
-
-==== Create AdoptionListenerTests
-. Create `src/test/java/com/example/AdoptionListenerTests.java`
-. Add `@QuarkusTest` annotation to class
-. Use `tdd 14 - adoptionListenerTests` live template to insert class outline
+[start=5]
 . Explain that we will need an `AdoptionListener` class
   * Use IntelliJ assist to create class from field
   * Add `@ApplicationScoped` to the class to add it as a bean
@@ -312,7 +312,7 @@ verify(this.adoptionListener).handleAdoption(any(AdoptionRequest.class));
 verifyNoMoreInteractions(this.petRepository);
 ----
 
-[start=7]
+[start=8]
 . Notice `handleAdoption` method doesn't exist
   * Use IntelliJ assist to create it
 . Add annotations to the `handleAdoption` method using the `tdd 16 - adoptionListenerHandleAdoptionAnnotations` live template
@@ -334,7 +334,7 @@ verify(this.adoptionListener, timeout(10_000)).handleAdoption(any(AdoptionReques
 verifyNoMoreInteractions(this.petRepository);
 ----
 
-[start=10]
+[start=11]
 . Tests should still be failing.
   * Now we need to implement `AdoptionListener`
 
