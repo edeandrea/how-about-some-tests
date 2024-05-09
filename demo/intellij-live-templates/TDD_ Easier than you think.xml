@@ -99,4 +99,72 @@
       <option name="MAVEN" value="true" />
     </context>
   </template>
+  <template name="tdd 4 - aiPetEntity" value="Create a JPA entity class named Pet in the com.example package with the following fields: &#10;&#10;Long id&#10;String name&#10;String kind&#10;String adoptedBy&#10;&#10;Generate all getters and setters and a toString method. The class should represent a table named &quot;pets&quot;.&#10;&#10;The id field should use a sequence table named &quot;pets_seq&quot; and should have an allocation size of 1 and the @Column annotations are unnecessary.&#10;&#10;Additionally define the following constructors:&#10;- An empty constructor&#10;- A constructor taking name and kind&#10;- A constructor taking id, name, and kind&#10;- A constructor taking all properties&#10;&#10;The constructors should appear between the properties and the getters and setters. List each import independently." description="Prompt to have AI generate Pet class" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="ANY_OPENAPI_JSON_FILE" value="false" />
+      <option name="ANY_OPENAPI_YAML_FILE" value="false" />
+      <option name="Angular" value="false" />
+      <option name="AsciiDoc" value="false" />
+      <option name="CSS" value="false" />
+      <option name="GENERAL_JSON_FILE" value="false" />
+      <option name="GENERAL_YAML_FILE" value="false" />
+      <option name="GROOVY" value="false" />
+      <option name="HTML" value="false" />
+      <option name="HTTP_CLIENT_ENVIRONMENT" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_SCRIPT" value="false" />
+      <option name="JSON" value="false" />
+      <option name="JSP" value="false" />
+      <option name="KOTLIN" value="false" />
+      <option name="KUBERNETES_RESOURCE" value="false" />
+      <option name="MAVEN" value="false" />
+      <option name="OTHER" value="true" />
+      <option name="PROTO" value="false" />
+      <option name="PROTOTEXT" value="false" />
+      <option name="PUML" value="false" />
+      <option name="Properties" value="false" />
+      <option name="QUTE" value="false" />
+      <option name="REQUEST" value="false" />
+      <option name="SHELL_SCRIPT" value="false" />
+      <option name="SQL" value="false" />
+      <option name="TypeScript" value="false" />
+      <option name="Vue" value="false" />
+      <option name="XML" value="false" />
+      <option name="browserslist" value="false" />
+    </context>
+  </template>
+  <template name="tdd 11a - aiCreatePetResource" value="Create a JAX-RS resource class that satisfies all of the unit tests in the following test class. These are  constraints that I don't want to violate:&#10;&#10;- Only create two methods&#10;- Don't throw any exceptions within the methods&#10;- Don't create variables that aren't needed&#10;&#10;Other preferences I have in order from most important to least important:&#10;- Prefer constructor injection&#10;- Optional input parameters should be represented as Optionals&#10;- Prefer using map functions when using Optionals&#10;- Prefer returning objects other than Response&#10;&#10;----------&#10;This is the test class:" description="Prompt to have AI generate the PetResource class" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="ANY_OPENAPI_JSON_FILE" value="false" />
+      <option name="ANY_OPENAPI_YAML_FILE" value="false" />
+      <option name="Angular" value="false" />
+      <option name="AsciiDoc" value="false" />
+      <option name="CSS" value="false" />
+      <option name="GENERAL_JSON_FILE" value="false" />
+      <option name="GENERAL_YAML_FILE" value="false" />
+      <option name="GROOVY" value="false" />
+      <option name="HTML" value="false" />
+      <option name="HTTP_CLIENT_ENVIRONMENT" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_SCRIPT" value="false" />
+      <option name="JSON" value="false" />
+      <option name="JSP" value="false" />
+      <option name="KOTLIN" value="false" />
+      <option name="KUBERNETES_RESOURCE" value="false" />
+      <option name="MAVEN" value="false" />
+      <option name="OTHER" value="true" />
+      <option name="PROTO" value="false" />
+      <option name="PROTOTEXT" value="false" />
+      <option name="PUML" value="false" />
+      <option name="Properties" value="false" />
+      <option name="QUTE" value="false" />
+      <option name="REQUEST" value="false" />
+      <option name="SHELL_SCRIPT" value="false" />
+      <option name="SQL" value="false" />
+      <option name="TypeScript" value="false" />
+      <option name="Vue" value="false" />
+      <option name="XML" value="false" />
+      <option name="browserslist" value="false" />
+    </context>
+  </template>
 </templateSet>
