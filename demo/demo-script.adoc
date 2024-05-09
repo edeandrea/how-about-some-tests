@@ -27,16 +27,14 @@
   * Hit `i` key to turn on instrumentation-based reload
 . Discuss `Hibernate ORM is disabled because no JPA entities were found` & `Dev Services for default datasource (postgresql) started`
   * Show & explain Dev UI
-. Create `Pet` class
+. Create `Pet` class (if using an AI assistant, use the `tdd 4 - aiPetEntity` live template), otherwise:
   * Add fields (`tdd 4 - petFields` live template)
   * Add getters/setters (IntelliJ assist)
   * Add `toString`/`hashCode`/`equals` (IntelliJ assist)
   * Add constructors (`tdd 5 - petConstructors` live template)
   * Turn into JPA Entity (`tdd 6 - petAnnotations` live template)
-. _Optional_: Show data explorer that table was created
 . Add `src/main/resources/import.sql` file
   * Use `tdd 7 - importsql` live template
-. _Optional_: Refresh data explorer showing that data is now in the table
 
 <<<
 
@@ -209,7 +207,8 @@ verifyNoMoreInteractions(this.petRepository);
 
 ==== Implement REST layer
 . Create `src/main/java/com/example/PetResource.java`
-. Explain how we know what we need to create
+. _Optional_: Use AI assist to create the class (`tdd 11a - aiCreatePetResource` live template)
+. _If not using AI to create_: Explain how we know what we need to create
   * `/pets` returns all `Pet` s
   * `/pets?kind={kind}` returns all `Pet` s of a certain kind
   * `/pets/{id}` returns a `Pet` given an id
@@ -240,7 +239,7 @@ public Response getPetById(@PathParam("id") Long id) {
 }
 ----
 
-[start=4]
+[start=5]
 . Add `@RunOnVirtualThread` to class and explain
 . _Optional_: Run `http :8080/pets` to see all pets
 . _Optional_: Run `http ":8080/pets?kind=cat"` to see all cats
