@@ -24,6 +24,7 @@
 
 ==== Create Entity
 . Start dev mode
+  * Hit `i` key to turn on instrumentation-based reload
 . Discuss `Hibernate ORM is disabled because no JPA entities were found` & `Dev Services for default datasource (postgresql) started`
   * Show & explain Dev UI
 . Create `Pet` class
