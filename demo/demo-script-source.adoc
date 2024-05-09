@@ -114,7 +114,7 @@ include::../src/test/java/com/example/PetResourceTests.java[indent=0,tag=getAll]
 
 ==== Implement REST layer
 . Create `src/main/java/com/example/PetResource.java`
-. _Optional_: Use AI assist to create the class (`tdd 11a - aiCreatePetResource` live template)
+. _Optional_: Use AI assist to create the class (highlight `PetResourceTests` contents & `tdd 11a - aiCreatePetResource` live template)
 . _If not using AI to create_: Explain how we know what we need to create
   * `/pets` returns all `Pet` s
   * `/pets?kind={kind}` returns all `Pet` s of a certain kind
