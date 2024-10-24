@@ -209,4 +209,4 @@ include::../src/main/java/com/example/AdoptionListener.java[indent=0,tag=handleA
 
 ==== Integration tests (if time permits)
 . Use `tdd - petResourceIT` live template for `PetResourceIT`
-. Use `tdd - adoptionListenerIT` live template for AdoptionListenerIT
+. Use `tdd - adoptionListenerIT` live template for `AdoptionListenerIT`
