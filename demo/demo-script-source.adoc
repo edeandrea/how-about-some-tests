@@ -14,7 +14,7 @@
   ** OpenTelemetry
   ** OpenAPI
   ** Health
-  ** Jib
+  ** Podman
 . Edit `pom.xml`
 .. Add OTeL JDBC dependency (`tdd 1 - pomOtelJdbc` live template)
 .. Add test dependencies (`tdd 2 - pomTestDeps` live template)
