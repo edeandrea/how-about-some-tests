@@ -368,4 +368,4 @@ this.petRepository.adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner
 
 ==== Integration tests (if time permits)
 . Use `tdd - petResourceIT` live template for `PetResourceIT`
-. Use `tdd - adoptionListenerIT` live template for AdoptionListenerIT
+. Use `tdd - adoptionListenerIT` live template for `AdoptionListenerIT`
