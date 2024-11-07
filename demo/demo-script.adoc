@@ -10,13 +10,10 @@
   ** REST Jackson
   ** Hibernate ORM Panache
   ** PostgreSQL JDBC Driver
-  ** Micrometer prometheus
-  ** OpenTelemetry
   ** OpenAPI
   ** Health
   ** Jib
 . Edit `pom.xml`
-.. Add OTeL dependencies (`tdd 1 - pomOtelDeps` live template)
 .. Add test dependencies (`tdd 2 - pomTestDeps` live template)
 . Go into link:../src/main/resources/application.properties[`src/main/resources/application.properties`] and add base config (`tdd 3 - baseConfig` live template)
 
@@ -26,6 +23,7 @@
 . Start dev mode
 . Discuss `Hibernate ORM is disabled because no JPA entities were found` & `Dev Services for default datasource (postgresql) started`
   * Show & explain Dev UI
+. Create the `com.example` package
 . Create `Pet` class (if using an AI assistant, use the `tdd 4 - aiPetEntity` live template), otherwise:
   * Add fields (`tdd 4 - petFields` live template)
   * Add getters/setters (IntelliJ assist)
@@ -39,6 +37,7 @@
 
 ==== Create Repository layer tests
 . Back in dev mode console point out `No tests found` (duh!)
+. Create the `src/test/java` folder and the `com.example` package
 . Create `src/test/java/com/example/PetRepositoryTests.java`
   * Annotate with `@QuarkusTest`
 . Bring in test stubs with `tdd 8 - petRepositoryTests` live template
@@ -282,7 +281,7 @@ public record AdoptionRequest(String owner, String kind) { }
 [source,java]
 ----
 // Set up mock
-when(this.petRepository.adoptPetIfFound(pet.getKind(), adoptionRequest.owner()))
+when(this.petRepository.adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner()))
 	.thenReturn(Optional.of(pet));
 
 // Send request to channel
@@ -306,7 +305,7 @@ assertThat(sink.received())
 	.isEqualTo(new Pet(pet.getId(), pet.getName(), pet.getKind(), adoptionRequest.owner()));
 
 // Verify interactions
-verify(this.petRepository).adoptPetIfFound(pet.getKind(), adoptionRequest.owner());
+verify(this.petRepository).adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner());
 verify(this.adoptionListener).handleAdoption(any(AdoptionRequest.class));
 verifyNoMoreInteractions(this.petRepository);
 ----
@@ -320,7 +319,7 @@ verifyNoMoreInteractions(this.petRepository);
 [source,java]
 ----
 // Set up mock
-when(this.petRepository.adoptPetIfFound(pet.getKind(), adoptionRequest.owner()))
+when(this.petRepository.adoptPetIfFound(adoptionRequest.kind()  , adoptionRequest.owner()))
 	.thenReturn(Optional.empty());
 
 // Send request to channel
@@ -328,7 +327,7 @@ this.inMemoryConnector.source(AdoptionListener.ADOPTION_REQUESTS_CHANNEL_NAME)
 	.send(adoptionRequest);
 
 // Verify interactions (with timeout)
-verify(this.petRepository, timeout(10_000)).adoptPetIfFound(pet.getKind(), adoptionRequest.owner());
+verify(this.petRepository, timeout(10_000)).adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner());
 verify(this.adoptionListener, timeout(10_000)).handleAdoption(any(AdoptionRequest.class));
 verifyNoMoreInteractions(this.petRepository);
 ----
