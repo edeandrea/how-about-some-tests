@@ -45,7 +45,7 @@ class AdoptionListenerTests {
 
 		// tag::adoptablePetFound[]
 		// Set up mock
-		when(this.petRepository.adoptPetIfFound(pet.getKind(), adoptionRequest.owner()))
+		when(this.petRepository.adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner()))
 			.thenReturn(Optional.of(pet));
 
 		// Send request to channel
@@ -69,7 +69,7 @@ class AdoptionListenerTests {
 			.isEqualTo(new Pet(pet.getId(), pet.getName(), pet.getKind(), adoptionRequest.owner()));
 
 		// Verify interactions
-		verify(this.petRepository).adoptPetIfFound(pet.getKind(), adoptionRequest.owner());
+		verify(this.petRepository).adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner());
 		verify(this.adoptionListener).handleAdoption(any(AdoptionRequest.class));
 		verifyNoMoreInteractions(this.petRepository);
 		// end::adoptablePetFound[]
@@ -82,7 +82,7 @@ class AdoptionListenerTests {
 
 		// tag::adoptablePetNotFound[]
 		// Set up mock
-		when(this.petRepository.adoptPetIfFound(pet.getKind(), adoptionRequest.owner()))
+		when(this.petRepository.adoptPetIfFound(adoptionRequest.kind()  , adoptionRequest.owner()))
 			.thenReturn(Optional.empty());
 
 		// Send request to channel
@@ -90,7 +90,7 @@ class AdoptionListenerTests {
 			.send(adoptionRequest);
 
 		// Verify interactions (with timeout)
-		verify(this.petRepository, timeout(10_000)).adoptPetIfFound(pet.getKind(), adoptionRequest.owner());
+		verify(this.petRepository, timeout(10_000)).adoptPetIfFound(adoptionRequest.kind(), adoptionRequest.owner());
 		verify(this.adoptionListener, timeout(10_000)).handleAdoption(any(AdoptionRequest.class));
 		verifyNoMoreInteractions(this.petRepository);
 		// end::adoptablePetNotFound[]
