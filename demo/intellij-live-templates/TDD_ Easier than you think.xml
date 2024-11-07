@@ -19,7 +19,7 @@
       <option name="JAVA_DECLARATION" value="true" />
     </context>
   </template>
-  <template name="tdd 3 - baseConfig" value="# Container image base image for Java 21&#10;quarkus.jib.base-jvm-image=registry.access.redhat.com/ubi9/openjdk-21-runtime:1.20&#10;&#10;# Turn on continuous testing by default&#10;quarkus.test.continuous-testing=enabled&#10;&#10;# JDBC-level tracing&#10;quarkus.datasource.jdbc.telemetry=true&#10;&#10;# Logging configuration&#10;%dev,test.quarkus.log.category.&quot;com.example&quot;.level=DEBUG&#10;%dev,test.quarkus.log.category.&quot;io.quarkus.opentelemetry.runtime.exporter.otlp.VertxGrpcExporter&quot;.level=OFF&#10;%prod.quarkus.log.console.format=%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{3.}] (%t) %s%e%n&#10;&#10;# Prod hibernate config&#10;%prod.quarkus.hibernate-orm.database.generation=drop-and-create&#10;%prod.quarkus.hibernate-orm.sql-load-script=import.sql&#10;&#10;$END$" description="Pet Prod Hibernate config" toReformat="false" toShortenFQNames="true">
+  <template name="tdd 3 - baseConfig" value="# Container image base image for Java 21&#10;quarkus.jib.base-jvm-image=registry.access.redhat.com/ubi9/openjdk-21-runtime:1.20&#10;&#10;# Turn on continuous testing by default&#10;quarkus.test.continuous-testing=enabled&#10;&#10;# Turn on instrumentation-based reload&#10;quarkus.live-reload.instrumentation=true&#10;&#10;# JDBC-level tracing&#10;quarkus.datasource.jdbc.telemetry=true&#10;&#10;# Logging configuration&#10;%dev,test.quarkus.log.category.&quot;com.example&quot;.level=DEBUG&#10;%prod.quarkus.log.console.format=%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{3.}] (%t) %s%e%n&#10;&#10;# Prod hibernate config&#10;%prod.quarkus.hibernate-orm.database.generation=drop-and-create&#10;%prod.quarkus.hibernate-orm.sql-load-script=import.sql&#10;&#10;$END$" description="Pet Prod Hibernate config" toReformat="false" toShortenFQNames="true">
     <context>
       <option name="CUCUMBER_FEATURE_FILE" value="false" />
       <option name="Properties" value="true" />
@@ -94,7 +94,7 @@
       <option name="JAVA_DECLARATION" value="true" />
     </context>
   </template>
-  <template name="tdd 1 - pomOtelJdbc" value="&lt;dependency&gt;&#10;  &lt;groupId&gt;io.opentelemetry.instrumentation&lt;/groupId&gt;&#10;&#9;&lt;artifactId&gt;opentelemetry-jdbc&lt;/artifactId&gt;&#10;&lt;/dependency&gt;" description="OpenTelemetry JDBC dependencies for pom.xml" toReformat="false" toShortenFQNames="true">
+  <template name="tdd 1 - pomOtelDeps" value="&lt;dependency&gt;&#10;  &lt;groupId&gt;io.opentelemetry.instrumentation&lt;/groupId&gt;&#10;&#9;&lt;artifactId&gt;opentelemetry-jdbc&lt;/artifactId&gt;&#10;&lt;/dependency&gt;&#10;&lt;dependency&gt;&#10;  &lt;groupId&gt;io.quarkus&lt;/groupId&gt;&#10;  &lt;artifactId&gt;quarkus-observability-devservices-lgtm&lt;/artifactId&gt;&#10;  &lt;scope&gt;provided&lt;/scope&gt;&#10;&lt;/dependency&gt;&#10;&lt;dependency&gt;&#10;  &lt;groupId&gt;io.quarkiverse.micrometer.registry&lt;/groupId&gt;&#10;  &lt;artifactId&gt;quarkus-micrometer-registry-otlp&lt;/artifactId&gt;&#10;  &lt;version&gt;3.2.4&lt;/version&gt;&#10;&lt;/dependency&gt;" description="OpenTelemetry dependencies for pom.xml" toReformat="false" toShortenFQNames="true">
     <context>
       <option name="MAVEN" value="true" />
     </context>
