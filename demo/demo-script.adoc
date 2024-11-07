@@ -16,7 +16,7 @@
   ** Health
   ** Jib
 . Edit `pom.xml`
-.. Add OTeL JDBC dependency (`tdd 1 - pomOtelJdbc` live template)
+.. Add OTeL dependencies (`tdd 1 - pomOtelDeps` live template)
 .. Add test dependencies (`tdd 2 - pomTestDeps` live template)
 . Go into link:../src/main/resources/application.properties[`src/main/resources/application.properties`] and add base config (`tdd 3 - baseConfig` live template)
 
@@ -24,7 +24,6 @@
 
 ==== Create Entity
 . Start dev mode
-  * Hit `i` key to turn on instrumentation-based reload
 . Discuss `Hibernate ORM is disabled because no JPA entities were found` & `Dev Services for default datasource (postgresql) started`
   * Show & explain Dev UI
 . Create `Pet` class (if using an AI assistant, use the `tdd 4 - aiPetEntity` live template), otherwise:
