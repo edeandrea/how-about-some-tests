@@ -22,7 +22,7 @@ class PetResourceTests {
 	PetRepository petRepository;
 
 	@Test
-	public void getAll() {
+	void getAll() {
 		// tag::getAll[]
 		// Set up mock to return a pet when repo.listAll() is called
 		when(this.petRepository.listAll())
@@ -44,7 +44,7 @@ class PetResourceTests {
 	}
 
 	@Test
-	public void getByKind() {
+	void getByKind() {
 		// Set up mock to return a pet when repo.findPetsByKind("cat") is called
 		when(petRepository.findPetsByKind("cat"))
 			.thenReturn(List.of(new Pet(1L, "fluffy", "cat", "Eric")));
@@ -64,7 +64,7 @@ class PetResourceTests {
 	}
 
 	@Test
-	public void getByIdFound() {
+	void getByIdFound() {
 		// Set up mock to return a pet when repo.findByIdOptional(1) is called
 		when(petRepository.findByIdOptional(1L))
 			.thenReturn(Optional.of(new Pet(1L, "fluffy", "cat", "Eric")));
@@ -83,7 +83,7 @@ class PetResourceTests {
 	}
 
 	@Test
-	public void getByIdNotFound() {
+	void getByIdNotFound() {
 		// Set up mock to return empty when repo.findByIdOptional(1) is called
 		when(petRepository.findByIdOptional(1L))
 			.thenReturn(Optional.empty());

@@ -16,7 +16,7 @@ class PetRepositoryTests {
 	PetRepository petRepository;
 
 	@Test
-	public void petsByKindFound() {
+	void petsByKindFound() {
 		// tag::petsByKindFound[]
 		// Delete everything from the repo
 		this.petRepository.deleteAll();
@@ -37,7 +37,7 @@ class PetRepositoryTests {
 	}
 
 	@Test
-	public void noPetsByKindFound() {
+	void noPetsByKindFound() {
 		// tag::noPetsByKindFound[]
 		// Delete everything from the repo
 		this.petRepository.deleteAll();
@@ -53,7 +53,7 @@ class PetRepositoryTests {
 	}
 
 	@Test
-	public void adoptFoundPet() {
+	void adoptFoundPet() {
 		// tag::adoptFoundPet[]
 		// Delete everything from the repo
 		this.petRepository.deleteAll();
@@ -77,7 +77,7 @@ class PetRepositoryTests {
 	}
 
 	@Test
-	public void noAdoptablePetFound() {
+	void noAdoptablePetFound() {
 		// tag::noAdoptablePetFound[]
 		// Delete everything from the repo
 		this.petRepository.deleteAll();

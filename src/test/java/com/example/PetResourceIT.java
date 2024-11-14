@@ -17,7 +17,7 @@ public class PetResourceIT {
 	private static final int NUM_RECORDS = 3;
 
 	@Test
-	public void getAll() {
+	void getAll() {
 		var pets = get("/pets")
 			.then()
 			.contentType(ContentType.JSON)
@@ -38,7 +38,7 @@ public class PetResourceIT {
 	}
 
 	@Test
-	public void getByKind() {
+	void getByKind() {
 		get("/pets?kind={kind}", "cat")
 			.then()
 			.contentType(ContentType.JSON)
@@ -49,7 +49,7 @@ public class PetResourceIT {
 	}
 
 	@Test
-	public void getByIdFound() {
+	void getByIdFound() {
 		get("/pets/{id}", 1L)
 			.then()
 			.contentType(ContentType.JSON)
@@ -59,7 +59,7 @@ public class PetResourceIT {
 	}
 
 	@Test
-	public void getByIdNotFound() {
+	void getByIdNotFound() {
 		get("/pets/{id}", NUM_RECORDS + 1)
 			.then()
 			.statusCode(NOT_FOUND.getStatusCode())

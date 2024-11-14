@@ -22,12 +22,12 @@ import io.smallrye.reactive.messaging.kafka.companion.KafkaCompanion;
 
 @QuarkusIntegrationTest
 @QuarkusTestResource(KafkaCompanionResource.class)
-public class AdoptionListenerIT {
+class AdoptionListenerIT {
 	@InjectKafkaCompanion
 	KafkaCompanion kafkaCompanion;
 
 	@Test
-	public void adoptablePetFound() {
+	void adoptablePetFound() {
 		var pet = getPet();
 		var adoptionRequest = new AdoptionRequest("Eric", pet.getKind());
 

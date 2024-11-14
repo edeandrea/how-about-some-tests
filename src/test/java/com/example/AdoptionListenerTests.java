@@ -33,13 +33,13 @@ class AdoptionListenerTests {
 	InMemoryConnector inMemoryConnector;
 
 	@BeforeEach
-	public void beforeEach() {
+	void beforeEach() {
 		// Clear the emitter sink between tests
 		this.inMemoryConnector.sink(AdoptionListener.ADOPTIONS_CHANNEL_NAME).clear();
 	}
 
 	@Test
-	public void adoptablePetFound() {
+	void adoptablePetFound() {
 		var pet = new Pet(1L, "fluffy", "cat", "Eric");
 		var adoptionRequest = new AdoptionRequest("Eric", pet.getKind());
 
@@ -76,7 +76,7 @@ class AdoptionListenerTests {
 	}
 
 	@Test
-	public void adoptablePetNotFound() {
+	void adoptablePetNotFound() {
 		var pet = new Pet(1L, "fluffy", "cat");
 		var adoptionRequest = new AdoptionRequest("Eric", pet.getKind());
 
